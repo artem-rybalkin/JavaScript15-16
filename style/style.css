@@ -1,0 +1,20 @@
+.wrapper {
+	width: 680px;
+	margin: 0 auto;
+}
+.1 {
+	display: flex;
+	
+}
+form {
+	text-align: center;
+	padding-top: 100px;
+}
+.inp {
+margin:auto;
+}
+#field {
+	width: 400px;
+	/*height: 20px;*/
+
+}
