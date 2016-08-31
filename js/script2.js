@@ -1,72 +1,86 @@
-$(document).ready(function(){
-
-
-// Кроссбраузерная функция создания XMLHttpRequest
-function getXmlHttp(){
-  var xmlhttp;
-  try {
-    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-  } catch (e) {
-    try {
-      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    } catch (E) {
-      xmlhttp = false;
-    }
-  }
-  if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-    xmlhttp = new XMLHttpRequest();
-  }
-  return xmlhttp;
+// --------- Класс-Родитель ------------
+function human (name,age,sex,hieght,weight) {
+  this.name=name;
+  this.age=age;
+  this.sex=sex;
+  this.hieght=hieght;
+  this.weight=weight;
 }
-// Кроссбраузерная функция создания XMLHttpRequest//
-////////////////////////////////////////////////////////
-var button = document.getElementById('button1');
-var im = document.getElementById('image1'); 
-var parentElem = document.body;
-// var str;
-// var xmlhttp;
-// // ask();
-// function ask() {
-//   var zapros = document.getElementById('field1');
-//   var zapros1 = zapros.getAttribute('value');
-//   var str = 'https://pixabay.com/api/?key=3168519-28357a1b07f864f5473734c78&q='+zapros1+'&image_type=photo';
-//   return(str);
- 
-// }
-function ask1(){
-
-  var xmlhttp = getXmlHttp();
-  xmlhttp.open('GET', 'https://pixabay.com/api/?key=3168519-28357a1b07f864f5473734c78&q=yellow&image_type=photo', true);
-  xmlhttp.send(null);
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == 4) {
-      if(xmlhttp.status == 200) {
-        var  data = JSON.parse(xmlhttp.responseText);
-        // var img = document.createElement('img');
-        // img.setAttribute('src', data.hits[0].previewURL);
-        // parentElem.appendChild( img );
-        // alert(im.getAttribute('src'));
-        // шобланизируем:)
-        var template = $('#template').html();
-        var content = tmpl(template, {data:data});
-        $('body').append(content);
-        } else { alert('bad');}
-    } 
-  }
+// --------- Класс-потомок -----------
+// Конструктор потомка1
+function worker (name,age,sex,hieght,weight) {
+  human.apply(this, arguments);
 }
- // function ask11(){
+// Конструктор потомка2
+function student (name,age,sex,hieght,weight) {
+  human.apply(this, arguments);
+}
 
-$('#button1').click( function() {
-ask1();
+// Унаследовать1
+worker.prototype = Object.create(human.prototype);
+// Унаследовать2
+student.prototype = Object.create(human.prototype);
+// Желательно и constructor сохранить1
+worker.prototype.constructor = worker;
+// Желательно и constructor сохранить2
+student.prototype.constructor = student;
+// Методы потомка1
+worker.prototype.working = function(workPlace,salary) {
+  this.workPlace = workPlace;
+  this.salary = salary;
+};
+student.prototype.watchSerials = function(university,grants) {
+  this.university = university;
+  this.grants = grants;
+};
+// Готово, можно создавать объект1
+var Worker = new worker('Anton2', 282, 'male', 170,75);
+// Готово, можно создавать объект2
+var Student = new student('Andrey', 20, 'male', 178, 80);
+Worker.working('GridDynamics', 1000);
+Student.watchSerials('KHAI',300);
+console.log(Worker);
+console.log(Student);
 
-});  // }
-  // button.addEventListener("click", ask11);
 
 
 
-// function key(){
-//   alert('key!!!');
-// }
 
-//https://pixabay.com/api/?key=3168519-28357a1b07f864f5473734c78&q=yellow+flowers&image_type=photo
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // function worker(name,age,sex,hieght,weight){
+// //   human.apply(this,arguments);
+// // }
+
+// var worker = new human();
+
+
+// worker.working = function(workPlace,salary) {
+//   this.workPlace = workPlace;
+//   this.salary = salary;
+// };
+// var worker1 = worker('Anton2', 282, 'male2', 1270,525);
+// worker.working('IT', 1200);
+// var student = new human('Andrey', 20, 'male', 178, 80);
+// student.watchingSerials = function (grants, university) {
+//   this.grants = grants;
+//   this.university = university;
+// };
+// student.watchingSerials(200, 'KHAI');
+// console.log(worker);
+// // console.log(worker1);
+// // console.log(student);
